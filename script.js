@@ -1,0 +1,268 @@
+// ============================================
+// MOBILE NAVIGATION TOGGLE
+// ============================================
+
+const navToggle = document.getElementById('nav-toggle');
+const navMenu = document.getElementById('nav-menu');
+
+// Toggle menu on hamburger button click
+navToggle.addEventListener('click', () => {
+    navToggle.classList.toggle('active');
+    navMenu.classList.toggle('active');
+});
+
+// Close menu when a link is clicked
+const navLinks = navMenu.querySelectorAll('a');
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        navToggle.classList.remove('active');
+        navMenu.classList.remove('active');
+    });
+});
+
+// Close menu when clicking outside
+document.addEventListener('click', (event) => {
+    const navbar = document.querySelector('.navbar');
+    if (!navbar.contains(event.target)) {
+        navToggle.classList.remove('active');
+        navMenu.classList.remove('active');
+    }
+});
+
+// ============================================
+// STICKY NAVBAR EFFECT
+// ============================================
+
+const navbar = document.getElementById('navbar');
+let lastScrollTop = 0;
+
+window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (scrollTop > 100) {
+        navbar.style.boxShadow = '0 2px 12px rgba(0, 0, 0, 0.12)';
+    } else {
+        navbar.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+    }
+    
+    lastScrollTop = scrollTop;
+});
+
+// ============================================
+// CONTACT FORM HANDLING
+// ============================================
+
+const contactForm = document.getElementById('contact-form');
+const formMessage = document.getElementById('form-message');
+
+contactForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    
+    // Get form data
+    const formData = new FormData(contactForm);
+    const name = formData.get('name').trim();
+    const email = formData.get('email').trim();
+    const phone = formData.get('phone').trim();
+    const subject = formData.get('subject').trim();
+    const message = formData.get('message').trim();
+    
+    // Validate form fields
+    if (!name || !email || !subject || !message) {
+        showFormMessage('Por favor, completa todos los campos requeridos.', 'error');
+        return;
+    }
+    
+    // Validate email format
+    if (!isValidEmail(email)) {
+        showFormMessage('Por favor, ingresa un correo electrónico válido.', 'error');
+        return;
+    }
+    
+    // Create mailto link with form data
+    const mailtoSubject = `Nueva consulta: ${subject}`;
+    const mailtoBody = `Nombre: ${name}\nCorreo: ${email}\nTeléfono: ${phone || 'No proporcionado'}\n\nMensaje:\n${message}`;
+    
+    // Open email client
+    const mailtoLink = `mailto:contacto@rubenjimenez.com?subject=${encodeURIComponent(mailtoSubject)}&body=${encodeURIComponent(mailtoBody)}`;
+    window.location.href = mailtoLink;
+    
+    // Show success message
+    showFormMessage('Tu mensaje se abrirá en tu cliente de correo. Por favor, completa el envío.', 'success');
+    
+    // Reset form after a short delay
+    setTimeout(() => {
+        contactForm.reset();
+        formMessage.classList.remove('success', 'error');
+    }, 3000);
+});
+
+// Helper function to validate email format
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Helper function to show form message
+function showFormMessage(message, type) {
+    formMessage.textContent = message;
+    formMessage.classList.remove('success', 'error');
+    formMessage.classList.add(type);
+}
+
+// ============================================
+// SMOOTH SCROLL BEHAVIOR
+// ============================================
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        
+        // Skip the WhatsApp button and other non-section links
+        if (href === '#') return;
+        
+        const target = document.querySelector(href);
+        
+        if (target) {
+            e.preventDefault();
+            
+            // Calculate offset for sticky navbar
+            const navHeight = navbar.offsetHeight;
+            const targetPosition = target.offsetTop - navHeight;
+            
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
+// ============================================
+// SCROLL-TO-TOP INDICATOR
+// ============================================
+
+window.addEventListener('scroll', () => {
+    const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+    
+    // This can be used for visual indicators if needed
+    // For example, to show a progress bar or scroll indicator
+});
+
+// ============================================
+// ACTIVE LINK HIGHLIGHTING
+// ============================================
+
+window.addEventListener('scroll', () => {
+    let current = '';
+    
+    const sections = document.querySelectorAll('section[id]');
+    
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (pageYOffset >= sectionTop - 200) {
+            current = section.getAttribute('id');
+        }
+    });
+    
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').slice(1) === current) {
+            link.classList.add('active');
+        }
+    });
+});
+
+// ============================================
+// LAZY LOAD IMAGES (for future image optimization)
+// ============================================
+
+// Check if Intersection Observer is supported
+if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                if (img.dataset.src) {
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                }
+                observer.unobserve(img);
+            }
+        });
+    });
+    
+    // Observe all images with data-src attribute
+    document.querySelectorAll('img[data-src]').forEach(img => {
+        imageObserver.observe(img);
+    });
+}
+
+// ============================================
+// PAGE LOAD ANIMATION
+// ============================================
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Add fade-in class to body for any entrance animations
+    document.body.classList.add('loaded');
+    
+    // Initialize any other functionality that depends on full page load
+    console.log('Página cargada completamente');
+});
+
+// ============================================
+// UTILITY FUNCTION FOR TRACKING EVENTS
+// ============================================
+
+// Basic event tracking function (can be expanded for analytics)
+function trackEvent(eventName, eventData = {}) {
+    // This can be connected to Google Analytics or similar services
+    console.log(`Event: ${eventName}`, eventData);
+}
+
+// Track button clicks for analytics
+document.querySelectorAll('.button-primary, .button-secondary').forEach(button => {
+    button.addEventListener('click', () => {
+        const text = button.textContent.trim();
+        trackEvent('button_click', { button_text: text });
+    });
+});
+
+// ============================================
+// RESPONSIVE IMAGE HANDLING
+// ============================================
+
+// Adjust image size based on screen size
+function handleImageResponsiveness() {
+    const profileImage = document.querySelector('.profile-image');
+    
+    if (profileImage) {
+        // Images will naturally scale with CSS media queries
+        // This function can be enhanced for dynamic adjustments if needed
+    }
+}
+
+window.addEventListener('resize', handleImageResponsiveness);
+
+// ============================================
+// ACCESSIBILITY ENHANCEMENTS
+// ============================================
+
+// Add keyboard navigation support for mobile menu
+navToggle.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        navToggle.click();
+    }
+});
+
+// Ensure proper tab focus management
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+        // Close mobile menu on Escape key
+        if (navMenu.classList.contains('active')) {
+            navToggle.click();
+        }
+    }
+});
