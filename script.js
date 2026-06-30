@@ -1,52 +1,3 @@
-// ============================================
-// MOBILE NAVIGATION TOGGLE
-// ============================================
-
-const navToggle = document.getElementById('nav-toggle');
-const navMenu = document.getElementById('nav-menu');
-
-// Toggle menu on hamburger button click
-navToggle.addEventListener('click', () => {
-    navToggle.classList.toggle('active');
-    navMenu.classList.toggle('active');
-});
-
-// Close menu when a link is clicked
-const navLinks = navMenu.querySelectorAll('a');
-navLinks.forEach(link => {
-    link.addEventListener('click', () => {
-        navToggle.classList.remove('active');
-        navMenu.classList.remove('active');
-    });
-});
-
-// Close menu when clicking outside
-document.addEventListener('click', (event) => {
-    const navbar = document.querySelector('.navbar');
-    if (!navbar.contains(event.target)) {
-        navToggle.classList.remove('active');
-        navMenu.classList.remove('active');
-    }
-});
-
-// ============================================
-// STICKY NAVBAR EFFECT
-// ============================================
-
-const navbar = document.getElementById('navbar');
-let lastScrollTop = 0;
-
-window.addEventListener('scroll', () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    if (scrollTop > 100) {
-        navbar.style.boxShadow = '0 2px 12px rgba(0, 0, 0, 0.12)';
-    } else {
-        navbar.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
-    }
-    
-    lastScrollTop = scrollTop;
-});
 
 // ============================================
 // CONTACT FORM HANDLING
@@ -148,31 +99,6 @@ window.addEventListener('scroll', () => {
     // For example, to show a progress bar or scroll indicator
 });
 
-// ============================================
-// ACTIVE LINK HIGHLIGHTING
-// ============================================
-
-window.addEventListener('scroll', () => {
-    let current = '';
-    
-    const sections = document.querySelectorAll('section[id]');
-    
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        
-        if (pageYOffset >= sectionTop - 200) {
-            current = section.getAttribute('id');
-        }
-    });
-    
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href').slice(1) === current) {
-            link.classList.add('active');
-        }
-    });
-});
 
 // ============================================
 // LAZY LOAD IMAGES (for future image optimization)
@@ -245,24 +171,3 @@ function handleImageResponsiveness() {
 
 window.addEventListener('resize', handleImageResponsiveness);
 
-// ============================================
-// ACCESSIBILITY ENHANCEMENTS
-// ============================================
-
-// Add keyboard navigation support for mobile menu
-navToggle.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        navToggle.click();
-    }
-});
-
-// Ensure proper tab focus management
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-        // Close mobile menu on Escape key
-        if (navMenu.classList.contains('active')) {
-            navToggle.click();
-        }
-    }
-});

@@ -1,0 +1,6 @@
+Features/changes to implement
+-Take professional photo?
+-Remove stock photo
+
+Bugs to fix
+-Whatsapp logo
