@@ -517,6 +517,11 @@ section {
     display: block;
 }
 
+.form-note.loading {
+    color: #0066cc;
+    display: block;
+}
+
 @media (min-width: 768px) {
     .contact-content {
         grid-template-columns: 1fr 1fr;

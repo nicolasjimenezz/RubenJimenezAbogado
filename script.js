@@ -6,45 +6,50 @@
 const contactForm = document.getElementById('contact-form');
 const formMessage = document.getElementById('form-message');
 
-contactForm.addEventListener('submit', (event) => {
+contactForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    
-    // Get form data
+
+    if (!contactForm) return;
+
     const formData = new FormData(contactForm);
-    const name = formData.get('name').trim();
-    const email = formData.get('email').trim();
-    const phone = formData.get('phone').trim();
-    const subject = formData.get('subject').trim();
-    const message = formData.get('message').trim();
-    
-    // Validate form fields
+    const name = formData.get('name')?.toString().trim();
+    const email = formData.get('email')?.toString().trim();
+    const phone = formData.get('phone')?.toString().trim();
+    const subject = formData.get('subject')?.toString().trim();
+    const message = formData.get('message')?.toString().trim();
+
     if (!name || !email || !subject || !message) {
         showFormMessage('Por favor, completa todos los campos requeridos.', 'error');
         return;
     }
-    
-    // Validate email format
+
     if (!isValidEmail(email)) {
         showFormMessage('Por favor, ingresa un correo electrónico válido.', 'error');
         return;
     }
-    
-    // Create mailto link with form data
-    const mailtoSubject = `Nueva consulta: ${subject}`;
-    const mailtoBody = `Nombre: ${name}\nCorreo: ${email}\nTeléfono: ${phone || 'No proporcionado'}\n\nMensaje:\n${message}`;
-    
-    // Open email client
-    const mailtoLink = `mailto:contacto@rubenjimenez.com?subject=${encodeURIComponent(mailtoSubject)}&body=${encodeURIComponent(mailtoBody)}`;
-    window.location.href = mailtoLink;
-    
-    // Show success message
-    showFormMessage('Tu mensaje se abrirá en tu cliente de correo. Por favor, completa el envío.', 'success');
-    
-    // Reset form after a short delay
-    setTimeout(() => {
-        contactForm.reset();
-        formMessage.classList.remove('success', 'error');
-    }, 3000);
+
+    showFormMessage('Enviando tu consulta...', 'loading');
+
+    try {
+        const response = await fetch(contactForm.action, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json'
+            },
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (response.ok && result.success) {
+            showFormMessage('Tu consulta se envió correctamente. Te responderemos a la brevedad.', 'success');
+            contactForm.reset();
+        } else {
+            showFormMessage(result.message || 'No se pudo enviar el mensaje. Inténtalo de nuevo.', 'error');
+        }
+    } catch (error) {
+        showFormMessage('Ocurrió un error al enviar la consulta. Inténtalo nuevamente.', 'error');
+    }
 });
 
 // Helper function to validate email format
@@ -56,8 +61,9 @@ function isValidEmail(email) {
 // Helper function to show form message
 function showFormMessage(message, type) {
     formMessage.textContent = message;
-    formMessage.classList.remove('success', 'error');
+    formMessage.classList.remove('success', 'error', 'loading');
     formMessage.classList.add(type);
+    formMessage.style.display = 'block';
 }
 
 // ============================================
