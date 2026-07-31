@@ -1,4 +1,4 @@
-# Lawyer | Webpage
+# Dr. Rubén Daniel Jiménez | Lawyer
 
 This project is a professional landing page created for a lawyer, designed to present their profile, areas of practice, and make it easy for potential clients to get in touch in a clear and modern way.
 
