@@ -70,22 +70,22 @@ function showFormMessage(message, type) {
 // SMOOTH SCROLL BEHAVIOR
 // ============================================
 
+const navbar = document.querySelector('.navbar');
+
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
-        
-        // Skip the WhatsApp button and other non-section links
-        if (href === '#') return;
-        
+
+        if (!href || href === '#') return;
+
         const target = document.querySelector(href);
-        
+
         if (target) {
             e.preventDefault();
-            
-            // Calculate offset for sticky navbar
-            const navHeight = navbar.offsetHeight;
+
+            const navHeight = navbar ? navbar.offsetHeight : 0;
             const targetPosition = target.offsetTop - navHeight;
-            
+
             window.scrollTo({
                 top: targetPosition,
                 behavior: 'smooth'
