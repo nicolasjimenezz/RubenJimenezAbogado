@@ -28,7 +28,7 @@ contactForm.addEventListener('submit', async (event) => {
         return;
     }
 
-    showFormMessage('Enviando tu consulta...', 'loading');
+    showFormMessage('Enviando consulta...', 'loading');
 
     try {
         const response = await fetch(contactForm.action, {
@@ -42,13 +42,13 @@ contactForm.addEventListener('submit', async (event) => {
         const result = await response.json();
 
         if (response.ok && result.success) {
-            showFormMessage('Tu consulta se envió correctamente. Te responderemos a la brevedad.', 'success');
+            showFormMessage('La consulta se envió correctamente. Le responderemos a la brevedad.', 'success');
             contactForm.reset();
         } else {
-            showFormMessage(result.message || 'No se pudo enviar el mensaje. Inténtalo de nuevo.', 'error');
+            showFormMessage(result.message || 'No se pudo enviar el mensaje. Inténtelo de nuevo.', 'error');
         }
     } catch (error) {
-        showFormMessage('Ocurrió un error al enviar la consulta. Inténtalo nuevamente.', 'error');
+        showFormMessage('Ocurrió un error al enviar la consulta. Inténtelo nuevamente.', 'error');
     }
 });
 
