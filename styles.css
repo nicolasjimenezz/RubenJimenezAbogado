@@ -216,11 +216,11 @@ a:hover {
     }
 
     .hero-text {
-        order: 1;
+        order: 2;
     }
 
     .hero-image {
-        order: 2;
+        order: 1;
     }
 
     .hero-name {
@@ -310,12 +310,15 @@ section {
 }
 
 .services-grid {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 2rem;
 }
 
 .service-card {
+    flex: 1 1 100%;
+    max-width: 420px;
     background-color: #fff;
     padding: 2rem;
     border-radius: 6px;
@@ -342,14 +345,17 @@ section {
 
 @media (min-width: 768px) {
     .services-grid {
-        grid-template-columns: repeat(2, 1fr);
         gap: 2.5rem;
+    }
+
+    .service-card {
+        flex-basis: calc(50% - 1.25rem);
     }
 }
 
 @media (min-width: 1024px) {
-    .services-grid {
-        grid-template-columns: repeat(3, 1fr);
+    .service-card {
+        flex-basis: calc(33.333% - 1.666rem);
     }
 }
 
@@ -362,12 +368,15 @@ section {
 }
 
 .reasons-grid {
-    display: grid;
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 2rem;
 }
 
 .reason-item {
+    flex: 1 1 100%;
+    max-width: 420px;
     padding: 2rem;
     background-color: #f9f9f9;
     border-radius: 6px;
@@ -396,14 +405,17 @@ section {
 
 @media (min-width: 768px) {
     .reasons-grid {
-        grid-template-columns: repeat(2, 1fr);
         gap: 2.5rem;
+    }
+
+    .reason-item {
+        flex-basis: calc(50% - 1.25rem);
     }
 }
 
 @media (min-width: 1024px) {
-    .reasons-grid {
-        grid-template-columns: repeat(3, 1fr);
+    .reason-item {
+        flex-basis: calc(33.333% - 1.666rem);
     }
 }
 
